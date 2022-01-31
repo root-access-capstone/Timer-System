@@ -25,7 +25,7 @@ moisture = 0
 
 timeToKeepLightOn = timedelta(hours=8)
 timeToKeepLightOff = timedelta(hours=16)
-lightStartOn = datetime.now()
+lightStartOn = datetime.now() - timeToKeepLightOn
 timeLightOn = 0 #This is how long the light has actually been on
 isLightOn = False
 lightBool = True

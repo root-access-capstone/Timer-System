@@ -26,14 +26,14 @@ def checkIfLightNeeded(lightStartTime:datetime, isLightOn:bool, timeToKeepLightO
     """
     now = datetime.now()
     if isLightOn:
-        if (lightStartTime + timeToKeepLightOn) <= now:
+        if (lightStartTime + timeToKeepLightOn) >= now:
             # turnLightOn(board)
             return lightStartTime, isLightOn, False
         else:
             # turnLightOff(board)
             return lightStartTime, False, True
     else:
-        if (lightStartTime + timeToKeepLightOff) >= now:
+        if (lightStartTime + timeToKeepLightOn + timeToKeepLightOff) <= now:
             # turnLightOn(board)
             return datetime.now(), True, False
         else:
