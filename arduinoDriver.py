@@ -34,7 +34,7 @@ lightOn = False
 
 timeToKeepPumpOn = timedelta(seconds=10)
 timeToKeepPumpOff = timedelta(seconds=10)
-pumpStartTime = datetime.now()
+pumpStartTime = datetime.now() - timeToKeepPumpOn
 timePumpOn = 0
 isPumpOn = False
 pumpBool = True

@@ -34,7 +34,7 @@ def checkIfPumpNeeded(floatFlag:str, pumpStartTime:datetime, isPumpOn:bool, time
                 # turnPumpOff(board)
                 return pumpStartTime, False, True
         else:
-            if (pumpStartTime + timeToKeepPumpOff) >= now:#pump is off, turn on
+            if (pumpStartTime + timeToKeepPumpOn + timeToKeepPumpOff) <= now:#pump is off, turn on
                 # turnPumpOn(board)
                 return datetime.now(), True, False
             else:
