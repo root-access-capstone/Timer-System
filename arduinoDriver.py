@@ -90,7 +90,7 @@ while True:
                     determineSignalToSend(isPumpOn, isLightOn, board)
                     signalSentBool = True
         timeDataCollected = datetime.now().strftime('%Y-%m-%d-%H:%M:%S')
-        output = board.readline().decode('utf-8').strip().split(',')
+        output = board.readline().decode('utf-8', 'ignore').strip().split(',')
         if len(output) == 6:
             # temp = output[0]
             # hum = output[1]
