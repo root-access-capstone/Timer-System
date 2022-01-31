@@ -1,5 +1,4 @@
-import serial
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # def turnLightOn(board:serial.Serial) -> None:
 #     """
@@ -17,7 +16,7 @@ from datetime import datetime
 #     """
 #     board.write(b'D')
 
-def checkIfLightNeeded(lightStartTime:int, isLightOn:bool, timeToKeepLightOn: datetime, timeToKeepLightOff: datetime) -> None:
+def checkIfLightNeeded(lightStartTime:datetime, isLightOn:bool, timeToKeepLightOn: timedelta, timeToKeepLightOff: timedelta) -> None:
     """
     Checks if the light is needed or not, then turns it
     on or off accordingly.

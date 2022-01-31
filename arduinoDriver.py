@@ -1,5 +1,5 @@
 # Third Party
-from datetime import datetime
+from datetime import datetime, timedelta
 import serial
 import time
 
@@ -23,18 +23,18 @@ temp = 70
 hum = 20
 moisture = 0
 
-timeToKeepLightOn = 28800
-timeToKeepLightOff = 57600
-lightStartOn = 0
-timeLightOn = 0
+timeToKeepLightOn = timedelta(hours=8)
+timeToKeepLightOff = timedelta(hours=16)
+lightStartOn = datetime.now()
+timeLightOn = 0 #This is how long the light has actually been on
 isLightOn = False
 lightBool = True
 lightOn = False
 # lightArray = DataArray(101, 20)
 
-timeToKeepPumpOn = 0
-timeToKeepPumpOff = 0
-pumpStartOn = 0
+timeToKeepPumpOn = timedelta(seconds=10)
+timeToKeepPumpOff = timedelta(seconds=10)
+pumpStartTime = datetime.now()
 timePumpOn = 0
 isPumpOn = False
 pumpBool = True
@@ -71,9 +71,9 @@ while True:
             if temp != 0 and moisture != 0:
                 emailTimestamp = checkIfEmailNeeded(floatFlag, emailTimestamp)
                 if pumpBool:
-                    pumpStartOn, isPumpOn, endTime = checkIfPumpNeeded(floatFlag, pumpStartOn, isPumpOn, timeToKeepPumpOn, timeToKeepPumpOff)
+                    pumpStartTime, isPumpOn, endTime = checkIfPumpNeeded(floatFlag, pumpStartTime, isPumpOn, timeToKeepPumpOn, timeToKeepPumpOff)
                     if endTime:
-                        timePumpOn += int((datetime.now() - pumpStartOn).total_seconds()/60)
+                        timePumpOn += int((datetime.now() - pumpStartTime).total_seconds()/60)
                     pumpBool = False
                 if temp != -999:
                     returned = checkIfDataNeedsSent(lastMinuteSent, temp, hum, moistureArray.getAvg(), timeLightOn, timePumpOn, timeDataCollected, envId)

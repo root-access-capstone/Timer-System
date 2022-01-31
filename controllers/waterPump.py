@@ -1,5 +1,5 @@
 import serial
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # def turnPumpOn(board:serial.Serial) -> None:
 #     """
@@ -17,7 +17,7 @@ from datetime import datetime
 #     """
 #     board.write(b'B')
 
-def checkIfPumpNeeded(floatFlag:str, pumpStartTime:int, isPumpOn:bool, timeToKeepPumpOn: datetime, timeToKeepPumpOff: datetime) -> None:
+def checkIfPumpNeeded(floatFlag:str, pumpStartTime:datetime, isPumpOn:bool, timeToKeepPumpOn: timedelta, timeToKeepPumpOff: timedelta) -> None:
     """
     Real simple function to check if the pump is needed or not, then turns it on or off accordingly
 
