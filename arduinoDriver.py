@@ -32,8 +32,8 @@ lightBool = True
 lightOn = False
 # lightArray = DataArray(101, 20)
 
-timeToKeepPumpOn = timedelta(seconds=10)
-timeToKeepPumpOff = timedelta(seconds=10)
+timeToKeepPumpOn = timedelta(seconds=5)
+timeToKeepPumpOff = timedelta(hours=18)
 pumpStartTime = datetime.now() - timeToKeepPumpOn
 timePumpOn = 0
 isPumpOn = False
