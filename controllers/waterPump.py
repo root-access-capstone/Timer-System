@@ -1,4 +1,3 @@
-from MySQLdb import Time
 import serial
 from datetime import datetime
 
