@@ -23,8 +23,10 @@ temp = 70
 hum = 20
 moisture = 0
 
-timeToKeepLightOn = timedelta(hours=8)
-timeToKeepLightOff = timedelta(hours=16)
+#timeToKeepLightOn = timedelta(hours=8)
+#timeToKeepLightOff = timedelta(hours=16)
+timeToKeepLightOn = timedelta(minutes=5)
+timeToKeepLightOff = timedelta(seconds=20)
 lightStartOn = datetime.now() - timeToKeepLightOn
 timeLightOn = 0 #This is how long the light has actually been on
 isLightOn = False
@@ -68,27 +70,25 @@ def checkIfEmailNeeded(floatFlag, emailTimestamp):
 while True:
     try:
         while(board.inWaiting() == 0):
-            if temp != 0 and moisture != 0:
-                emailTimestamp = checkIfEmailNeeded(floatFlag, emailTimestamp)
-                if pumpBool:
-                    pumpStartTime, isPumpOn, endTime = checkIfPumpNeeded(floatFlag, pumpStartTime, isPumpOn, timeToKeepPumpOn, timeToKeepPumpOff)
-                    if endTime:
-                        timePumpOn += int((datetime.now() - pumpStartTime).total_seconds()/60)
-                    pumpBool = False
-                if temp != -999:
-                    returned = checkIfDataNeedsSent(lastMinuteSent, temp, hum, moistureArray.getAvg(), timeLightOn, timePumpOn, timeDataCollected, envId)
-                    if returned != lastMinuteSent:
-                        lastMinuteSent = returned
-                        timeLightOn = 0
-                        timePumpOn = 0
-                if lightBool:
-                    lightStartOn, isLightOn, endTime = checkIfLightNeeded(lightStartOn, isLightOn, timeToKeepLightOn, timeToKeepLightOff)
-                    if endTime:
-                        timeLightOn += int((datetime.now() - lightStartOn).total_seconds()/60)
-                    lightBool = False
-                if not signalSentBool:
-                    determineSignalToSend(isPumpOn, isLightOn, board)
-                    signalSentBool = True
+            emailTimestamp = checkIfEmailNeeded(floatFlag, emailTimestamp)
+            if pumpBool:
+                pumpStartTime, isPumpOn, endTime = checkIfPumpNeeded(floatFlag, pumpStartTime, isPumpOn, timeToKeepPumpOn, timeToKeepPumpOff)
+                if endTime:
+                    timePumpOn += int((datetime.now() - pumpStartTime).total_seconds()/60)
+                pumpBool = False
+            returned = checkIfDataNeedsSent(lastMinuteSent, temp, hum, moistureArray.getAvg(), lightStartOn, timePumpOn, timeDataCollected, envId)
+            if returned != lastMinuteSent:
+                lastMinuteSent = returned
+                timeLightOn = 0
+                timePumpOn = 0
+            if lightBool:
+                lightStartOn, isLightOn, endTime = checkIfLightNeeded(lightStartOn, isLightOn, timeToKeepLightOn, timeToKeepLightOff)
+                if endTime:
+                    timeLightOn += int((datetime.now() - lightStartOn).total_seconds()/60)
+                lightBool = False
+            if not signalSentBool:
+                determineSignalToSend(isPumpOn, isLightOn, board)
+                signalSentBool = True
         timeDataCollected = datetime.now().strftime('%Y-%m-%d-%H:%M:%S')
         output = board.readline().decode('utf-8', 'ignore').strip().split(',')
         if len(output) == 6:

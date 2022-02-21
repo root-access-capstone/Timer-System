@@ -4,15 +4,17 @@ from datetime import datetime
 # Proprietary
 from controllers.database import Database, SensorData, new_data_object
 from controllers.powerConsumption import measurePowerConsumption
+from controllers.lightValue import calculateLightTimeOn
 
 
-def checkIfDataNeedsSent(lastMinuteSent, temp, hum, moisture, timeLightOn, timePumpOn, timestamp, envId) -> None:
+def checkIfDataNeedsSent(lastMinuteSent, temp, hum, moisture, lightStartTime, timePumpOn, timestamp, envId) -> None:
     """If the time is right (every 15 minutes), calls send_data"""
     minutesToSendOn = [0, 15, 30, 45]
     now = datetime.now()
     minute = now.minute
     if minute in minutesToSendOn:
         if minute != lastMinuteSent:
+            timeLightOn = calculateLightTimeOn(lightStartTime)
             kwh = measurePowerConsumption(timePumpOn, timeLightOn)
             send_data(f'{envId},{timestamp},{timeLightOn},0,{kwh},{hum},{moisture},{temp}')
             lastMinuteSent = minute
@@ -31,7 +33,7 @@ def send_data(data:str) -> bool:
         if result:
             print('Stored sensor data in database.')
         else:
-            print('** Error: Failed to query database.')
+            print('**Error: Failed to query database.')
     except Exception as error:
         print('**Error adding to or querying database: ', error)
         return 0
