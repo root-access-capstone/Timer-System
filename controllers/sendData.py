@@ -7,7 +7,7 @@ from controllers.powerConsumption import measurePowerConsumption
 from controllers.lightValue import calculateLightTimeOn
 from controllers.waterConsumption import measureWaterConsumption
 
-def checkIfDataNeedsSent(lastMinuteSent, temp, hum, moisture, lightStartTime, timePumpOn, timestamp, envId) -> None:
+def checkIfDataNeedsSent(lastMinuteSent, temp, hum, moisture, lightStartTime, timePumpOn, timestamp, envId, db) -> None:
     """If the time is right (every 15 minutes), calls send_data"""
     minutesToSendOn = [0, 15, 30, 45]
     now = datetime.now()
@@ -17,20 +17,18 @@ def checkIfDataNeedsSent(lastMinuteSent, temp, hum, moisture, lightStartTime, ti
             timeLightOn = calculateLightTimeOn(lightStartTime)
             kwh = measurePowerConsumption(timePumpOn, timeLightOn)
             ml = measureWaterConsumption(timePumpOn)
-            send_data(f'{envId},{timestamp},{timeLightOn},{ml},{kwh},{hum},{moisture},{temp}')
+            send_data(f'{envId},{timestamp},{timeLightOn},{ml},{kwh},{hum},{moisture},{temp}', db)
             lastMinuteSent = minute
     return lastMinuteSent
 
-def send_data(data:str) -> bool:
+def send_data(data:str, db:Database) -> bool:
     """Sends data to database.
     Returns 1 if success, 0 otherwise."""
-    db = Database()
     data = new_data_object(data)
     try:
         db.Session.add(data)
         db.Session.commit()
         result = db.Session.query(SensorData).all()
-        db.Session.close()
         if result:
             print('Stored sensor data in database.')
         else:
