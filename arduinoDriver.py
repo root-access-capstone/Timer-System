@@ -77,7 +77,7 @@ while True:
             if pumpBool:
                 pumpStartTime, isPumpOn, endTime = checkIfPumpNeeded(floatFlag, pumpStartTime, isPumpOn, timeToKeepPumpOn, timeToKeepPumpOff)
                 if endTime:
-                    timePumpOn += int((datetime.now() - pumpStartTime).total_seconds()/60)
+                    timePumpOn += int((datetime.now() - pumpStartTime).total_seconds())
                 pumpBool = False
             returned = checkIfDataNeedsSent(lastMinuteSent, temp, hum, moistureArray.getAvg(), lightStartOn, timePumpOn, timeDataCollected, envId, db)
             if returned != lastMinuteSent:

@@ -1,2 +1,2 @@
 def measureWaterConsumption(timePumpOn):
-    return timePumpOn * (100000 / 60)
+    return timePumpOn * (100000 / 3660)
