@@ -81,7 +81,7 @@ def checkIfEmailNeeded(floatFlag, emailTimestamp):
 while True:
     try:
         while(board.inWaiting() == 0):
-            emailTimestamp = checkIfEmailNeeded(floatFlag, emailTimestamp)
+            #emailTimestamp = checkIfEmailNeeded(floatFlag, emailTimestamp)
             if pumpBool:
                 pumpStartTime, isPumpOn, endTime = checkIfPumpNeeded(floatFlag, pumpStartTime, isPumpOn, timeToKeepPumpOn, timeToKeepPumpOff)
                 if endTime:
