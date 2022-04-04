@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime, timedelta
 
 # def turnLightOn(board:serial.Serial) -> None:
@@ -56,6 +57,6 @@ def calculateLightTimeOn(lightStartTime:datetime) -> int:
         else: # Not on
             return 0
     except Exception as error:
-        print('**Error in calculateLightTimeOn: ', error)
+        logging.error(f'**Error in calculateLightTimeOn: {error}')
         return 0
     

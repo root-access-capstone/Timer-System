@@ -2,6 +2,7 @@
 from datetime import datetime, timedelta
 import serial
 import time
+import logging
 
 # Proprietary
 from controllers.sendEmail import notifyLowWater, notifyWaterFilled
@@ -12,6 +13,13 @@ from controllers.lightValue import checkIfLightNeeded
 from controllers.dataArray import DataArray
 from controllers.database import Database
 
+
+LOG_FORMAT = "%(levelname)s %(asctime)s - %(message)s"
+
+logging.basicConfig(filename="error_log.log",
+                    filemode="w",
+                    format=LOG_FORMAT,
+                    level=logging.ERROR)
 
 board = serial.Serial(
     port = '/dev/ttyACM0',
@@ -107,9 +115,9 @@ while True:
             pumpBool = True
             lightBool = True
             signalSentBool = False
-            print(output)
+            logging.info(output)
         else:
-            print("Incomplete board output: ", output)
+            logging.info("Incomplete board output: ", output)
             continue
     except Exception as error:
-        print('**Error reading board: ', error)
+        logging.error('**Error reading board: ', error)

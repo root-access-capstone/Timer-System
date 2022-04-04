@@ -1,4 +1,5 @@
 # Third Party
+import logging
 import sqlalchemy
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -58,7 +59,7 @@ class Database():
         try:
             engine = sqlalchemy.create_engine(f'mariadb+mariadbconnector://{self.user}:{self.password}@localhost:3306/{self.name}', echo = False)
         except Exception as error:
-            print('**Error creating sqlalchemy engine: ', error)
+            logging.error(f'**Error creating sqlalchemy engine: {error}')
         return engine
 
     def createSession(self) -> sqlalchemy.orm.Session:
@@ -69,7 +70,7 @@ class Database():
             Session.configure(bind=self.engine)
             Session = Session()
         except Exception as error:
-            print('**Error creating database Session: ', error)
+            logging.error(f'**Error creating database Session: {error}')
         return Session
 
     def createMetadata(self) -> None:
@@ -77,7 +78,7 @@ class Database():
         try:
             Base.metadata.create_all(self.engine)
         except Exception as error:
-            print('**Error creating database metadata: ', error)
+            logging.error(f'**Error creating database metadata: {error}')
 
     def initializeEnvironments(self) -> None:
         """Makes sure that there's an entry in the environments table for
@@ -90,9 +91,9 @@ class Database():
                 )
                 self.Session.add(env)
                 self.Session.commit()
-                print('Created initial entry in environments table.')
+                logging.error('Created initial entry in environments table.')
         except Exception as error:
-            print('**Error initializing environments: ', error)
+            logging.error(f'**Error initializing environments: {error}')
 
 def new_data_object(data:str) -> SensorData:
     """Returns new SensorData object from data string"""
@@ -100,7 +101,7 @@ def new_data_object(data:str) -> SensorData:
     try:
         data = data.strip().split(',')
         if len(data) != 8:
-            print('Error in new_data_object: Insufficient data to store in the database')
+            logging.error('Error in new_data_object: Insufficient data to store in the database')
             return 0
         dataObject = SensorData(
             envId = data[0],
@@ -113,5 +114,5 @@ def new_data_object(data:str) -> SensorData:
             temperature = data[7],
             )
     except Exception as error:
-        print('**Error creating new SensorData object: ', error)
+        logging.error(f'**Error creating new SensorData object: {error}')
     return dataObject

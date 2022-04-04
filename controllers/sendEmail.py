@@ -2,6 +2,7 @@
 import smtplib
 import time
 import socket
+import logging
 
 
 GMAILUSER = 'rootaccesplant@gmail.com'
@@ -28,7 +29,7 @@ def notifyLowWater(currentTime):
         smtp_server.sendmail(GMAILUSER, EMAILLIST, emailText)
         smtp_server.close()
     except Exception as error:
-        print('**Error sending low water email: ', error)
+        logging.error(f'**Error sending low water email: {error}')
 
 def notifyWaterFilled(currentTime):
     subject = 'ROOT ACCESS: Your water resevoir has been refilled'
@@ -49,7 +50,7 @@ def notifyWaterFilled(currentTime):
         smtp_server.sendmail(GMAILUSER, EMAILLIST, emailText)
         smtp_server.close()
     except Exception as error:
-        print('**Error sending filled reservoir email: ', error)
+        logging.error('**Error sending filled reservoir email: {error}')
 
 def resetPasswordEmail(email, secret):
     ip = socket.gethostbyname(socket.gethostname())
@@ -70,4 +71,4 @@ def resetPasswordEmail(email, secret):
         smtp_server.sendmail(GMAILUSER, EMAILLIST, emailText)
         smtp_server.close()
     except Exception as error:
-        print('**Error sending reset password email: ', error)
+        logging.error(f'**Error sending reset password email: {error}')

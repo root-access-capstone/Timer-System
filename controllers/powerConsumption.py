@@ -1,3 +1,6 @@
+import logging
+
+
 def wattsToKWH(x:int) -> int:
     """Convert watts to kilowatt hours"""
     return x/3600000
@@ -20,7 +23,7 @@ def measurePowerConsumption(pumpMinutes:int=0, lampMinutes:int=0) -> int:
             elif k != 'lamp' and k != 'pump':
                 powerConsumption += (v * (900))
     except Exception as error:
-        print('**Error computing powerConsumption: ', error)
+        logging.error(f'**Error computing powerConsumption: {error}')
 
     powerConsumptionKWH = wattsToKWH(powerConsumption)
     return powerConsumptionKWH

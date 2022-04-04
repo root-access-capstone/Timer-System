@@ -1,4 +1,5 @@
 # Third Party
+import logging
 from datetime import datetime
 
 # Proprietary
@@ -30,11 +31,11 @@ def send_data(data:str, db:Database) -> bool:
         db.Session.commit()
         result = db.Session.query(SensorData).all()
         if result:
-            print('Stored sensor data in database.')
+            logging.info('Stored sensor data in database.')
         else:
-            print('**Error: Failed to query database.')
+            logging.error('**Error: Failed to query database.')
     except Exception as error:
-        print('**Error adding to or querying database: ', error)
+        logging.error(f'**Error adding to or querying database: {error}')
         return 0
     return 1
 
